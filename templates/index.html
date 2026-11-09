@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DeepDigit | Handwritten Digit Recognition</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>DeepDigit</h1>
+        <p>Handwritten Digit Recognition Using CNN</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Recognize Your Digit</h2>
+
+            <p>
+                Upload an image of a handwritten digit from 0 to 9.
+                Our CNN model will predict the digit.
+            </p>
+
+            <form action="/predict" method="POST" enctype="multipart/form-data">
+
+                <label for="digit_image">Choose a digit image:</label>
+
+                <input
+                    type="file"
+                    id="digit_image"
+                    name="digit_image"
+                    accept="image/*"
+                    required
+                >
+
+                <button type="submit">Recognize Digit</button>
+
+            </form>
+            {% if prediction is defined %}
+<div class="result">
+    <h2>Prediction Result</h2>
+    <p>Recognized Digit: <strong>{{ prediction }}</strong></p>
+    <p>Model Confidence: <strong>{{ "%.2f"|format(confidence) }}%</strong></p>
+</div>
+{% endif %}
+
+            <div id="preview-container">
+                <img id="preview" alt="Selected digit preview">
+            </div>
+
+        </section>
+
+        <section class="card">
+            <h2>About the Project</h2>
+
+            <p>
+                DeepDigit uses a Convolutional Neural Network (CNN)
+                trained on the MNIST handwritten digit dataset.
+            </p>
+
+            <p>
+                The model classifies handwritten digits into ten classes,
+                from 0 to 9.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Model Performance</h2>
+
+            <p>
+                The following graphs are generated during model training.
+            </p>
+
+            <div class="graph">
+                <h3>Accuracy Graph</h3>
+                <img src="/outputs/accuracy.png" alt="Model accuracy graph">
+            </div>
+
+            <div class="graph">
+                <h3>Loss Graph</h3>
+                <img src="/outputs/loss.png" alt="Model loss graph">
+            </div>
+
+            <div class="graph">
+                <h3>Confusion Matrix</h3>
+                <img src="/outputs/confusion_matrix.png" alt="Confusion matrix">
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>DeepDigit | MCA Deep Learning Mini Project</p>
+    </footer>
+
+    <script>
+        const imageInput = document.getElementById("digit_image");
+        const preview = document.getElementById("preview");
+
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            }
+        });
+    </script>
+
+</body>
+</html>
